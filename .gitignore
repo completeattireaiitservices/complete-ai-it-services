@@ -1,0 +1,8 @@
+node_modules
+
+# local env (create `.env.local` in the project root — same folder as package.json)
+.env
+.env*.local
+
+# Next.js
+.next

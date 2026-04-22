@@ -1,0 +1,20 @@
+---
+description: Complete AI IT Services repo must stay separate from Wishbee.ai
+alwaysApply: true
+---
+
+# Complete AI IT Services vs Wishbee.ai
+
+This workspace folder is the **Complete AI IT Services** marketing site (Next.js in `CompleteAIITServices`). **Wishbee.ai** lives in a different project (e.g. `Wishbee-Main`).
+
+## Rules for agents and operators
+
+- **Never** copy deployment config from Wishbee into this repo in a way that points this app at Wishbee’s Vercel project, Git remote, or production domain.
+- **Never** assume changes here should be pushed to or deployed from the Wishbee repository.
+- When helping with **deploy / publish / Vercel / DNS**, explicitly treat this as a **separate Git repo** and **separate hosting project** from Wishbee.ai.
+- If the user opens a **multi-root** workspace containing both projects, prefer editing **only** the path under `CompleteAIITServices` for Complete AI IT Services tasks unless the user clearly asks for Wishbee.
+
+## Deploy safety (summary)
+
+- One Git repo → one production site for Complete AI IT Services.  
+- Wishbee.ai → its own repo and its own Vercel (or host) project per Wishbee’s deploy rules.
