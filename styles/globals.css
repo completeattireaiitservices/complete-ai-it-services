@@ -12,3 +12,20 @@
     @apply antialiased;
   }
 }
+
+@layer utilities {
+  .caits-site-search-panel {
+    animation: caits-site-search-in 0.2s ease-out both;
+  }
+
+  @keyframes caits-site-search-in {
+    from {
+      opacity: 0;
+      transform: scale(0.98) translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+}

@@ -20,6 +20,7 @@ This folder is the **Complete AI IT Services** Next.js site (`complete-ai-it-ser
 Create **`.env.local`** in the **project root** (next to `package.json`) for local values. It is gitignored.
 
 - `NEXT_PUBLIC_SITE_URL` — optional; public site URL (no trailing slash), for canonical URLs on blog pages. Production example: `https://completeaiitservices.ai`
+- `NEXT_PUBLIC_CALENDLY_URL` — optional; defaults to the [Complete AI IT Services Calendly](https://calendly.com/completeaiitservices) inline embed. Set in Vercel if you use a different event or subdomain.
 - `CONTACT_WEBHOOK_URL` — optional; production contact form POST target
 - `SUBSCRIBE_WEBHOOK_URL` — optional; production newsletter POST target
 

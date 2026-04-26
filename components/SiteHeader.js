@@ -2,8 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import clsx from "clsx";
 import { Share } from "next/font/google";
-import { ShoppingCart, Search } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { SiteHeaderFallbackCss } from "./CssChunkFallback";
+import SiteHeaderSearchButton from "./SiteHeaderSearchButton";
 
 const navFont = Share({
   weight: "400",
@@ -15,20 +16,21 @@ const NAV_DESKTOP = [
   { id: "home", href: "/", label: "Home" },
   { id: "services", href: "/services", label: "Services" },
   { id: "blog", href: "/blog", label: "Blog" },
-  { id: "contact", href: "/contact", label: "Contact us" },
+  { id: "contact", href: "/contact-us", label: "Contact us" },
 ];
 
 const NAV_MOBILE = [
   { id: "home", href: "/", label: "Home" },
   { id: "services", href: "/services", label: "Services" },
   { id: "blog", href: "/blog", label: "Blog" },
-  { id: "contact", href: "/contact", label: "Contact" },
+  { id: "contact", href: "/contact-us", label: "Contact" },
 ];
 
 /**
  * @param {{ endAction?: "cart" | "search"; activeNav?: string; hideLogo?: boolean }} props
+ * Default `endAction` is "search" (site-wide search modal). Use "cart" for the placeholder cart icon.
  */
-export default function SiteHeader({ endAction = "cart", activeNav, hideLogo = false }) {
+export default function SiteHeader({ endAction = "search", activeNav, hideLogo = false }) {
   /** Hide logo when prop is true (e.g. blog article pages). */
   const showLogo = !hideLogo;
 
@@ -114,13 +116,7 @@ export default function SiteHeader({ endAction = "cart", activeNav, hideLogo = f
           })}
         </nav>
         {endAction === "search" ? (
-          <button
-            type="button"
-            className="rounded p-2 text-white transition hover:bg-white/10"
-            aria-label="Search"
-          >
-            <Search className="h-5 w-5" strokeWidth={1.75} />
-          </button>
+          <SiteHeaderSearchButton />
         ) : (
           <button
             type="button"

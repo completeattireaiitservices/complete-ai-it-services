@@ -87,7 +87,7 @@ export default function LegalPageShell({
               ·
             </span>
             <Link
-              href="/contact"
+              href="/contact-us"
               className="text-sm font-semibold text-neutral-900 underline decoration-neutral-300 underline-offset-4 transition hover:decoration-neutral-900"
             >
               Contact us

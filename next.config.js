@@ -3,6 +3,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/contact",
+        destination: "/contact-us",
+        permanent: true,
+      },
+      {
         source: "/blog/gmail-copilot-governance-seo",
         destination: "/blog/gmail-copilots-governance-seo",
         permanent: true,

@@ -2,6 +2,12 @@ import { isValidEmail, trimToMax } from "../../lib/validators";
 
 const MAX_MESSAGE = 12_000;
 const MAX_NAME = 200;
+const MAX_COMPANY = 200;
+const MAX_TITLE = 150;
+const MAX_INDUSTRY = 200;
+const MAX_STACK = 2_000;
+const MAX_WORKFLOW = 2_000;
+const MAX_SHORT = 40;
 
 /**
  * Accepts contact inquiries. In production, forward to email, CRM, or ticket system
@@ -20,16 +26,56 @@ export default function handler(req, res) {
   const email = trimToMax(body?.email ?? "", 320);
   const name = trimToMax(body?.name ?? "", MAX_NAME);
   const message = trimToMax(body?.message ?? "", MAX_MESSAGE);
+  const company = trimToMax(body?.company ?? "", MAX_COMPANY);
+  const jobTitle = trimToMax(body?.jobTitle ?? "", MAX_TITLE);
+  const industry = trimToMax(body?.industry ?? "", MAX_INDUSTRY);
+  const teamSize = trimToMax(body?.teamSize ?? "", MAX_SHORT);
+  const currentStack = trimToMax(body?.currentStack ?? "", MAX_STACK);
+  const workflowFocus = trimToMax(body?.workflowFocus ?? "", MAX_WORKFLOW);
+  const timeline = trimToMax(body?.timeline ?? "", MAX_SHORT);
+  const rawInquiry = String(body?.inquiryType ?? "").toLowerCase().replace(/\s+/g, "_");
+  const inquiryType =
+    rawInquiry === "enterprise_rfp" || rawInquiry === "enterprise"
+      ? "enterprise_rfp"
+      : "general";
 
   if (!isValidEmail(email)) {
     return res.status(400).json({ ok: false, error: "A valid email is required." });
   }
 
+  const workflow = {
+    company: company || undefined,
+    jobTitle: jobTitle || undefined,
+    industry: industry || undefined,
+    teamSize: teamSize || undefined,
+    currentStack: currentStack || undefined,
+    workflowFocus: workflowFocus || undefined,
+    timeline: timeline || undefined,
+  };
+  const hasWorkflow = Object.values(workflow).some((v) => v !== undefined);
+  const workflowSummary = hasWorkflow
+    ? [
+        company && `Company: ${company}`,
+        jobTitle && `Role: ${jobTitle}`,
+        industry && `Industry: ${industry}`,
+        teamSize && `Team size: ${teamSize}`,
+        currentStack && `Tools/systems: ${currentStack}`,
+        workflowFocus && `Workflow focus: ${workflowFocus}`,
+        timeline && `Timeline: ${timeline}`,
+        message && `Notes: ${message}`,
+      ]
+        .filter(Boolean)
+        .join("\n")
+    : null;
+
   const payload = {
     type: "contact",
+    inquiryType,
     email,
     name: name || undefined,
     message: message || undefined,
+    workflow: hasWorkflow ? workflow : undefined,
+    workflowSummary: workflowSummary || undefined,
     receivedAt: new Date().toISOString(),
   };
 

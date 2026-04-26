@@ -1,13 +1,13 @@
 import React from "react";
 import { Share } from "next/font/google";
-import SafeImage from "../components/SafeImage";
 import Head from "next/head";
 import Link from "next/link";
+import { Layers } from "lucide-react";
 import clsx from "clsx";
 import SiteHeader from "../components/SiteHeader";
 import SiteFooter from "../components/SiteFooter";
+import TieredMethodologySection from "../components/TieredMethodologySection";
 
-/** Share 20px stack for all services page copy (title uses same family at 27px). */
 const servicesShareFont = Share({
   weight: ["400", "700"],
   subsets: ["latin"],
@@ -16,78 +16,201 @@ const servicesShareFont = Share({
   adjustFontFallback: false,
 });
 
-const SERVICE_ROWS = [
+const TIER_PILL = {
+  Small: "bg-emerald-100 text-emerald-900 ring-emerald-200/60",
+  Medium: "bg-sky-100 text-sky-900 ring-sky-200/60",
+  Enterprise: "bg-violet-100 text-violet-900 ring-violet-200/60",
+};
+
+const OFFERING_ACCENTS = [
   {
-    title: "AI Knowledge Assistant (website chatbot)",
-    body: "RAG-based assistant grounded in your PDFs, Airtable, and internal documentation—accurate, real-time answers for visitors and customers. One-time setup from $1,500; monthly retainer from $375. OpenAI and vector database usage billed at cost.",
-    image:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=900&q=80",
-    imageAlt: "Team presenting at a conference table with screens",
-    imageLeft: true,
+    border: "border-l-indigo-500",
+    badge: "from-indigo-600 to-indigo-500",
+    glow: "bg-indigo-500/10",
   },
   {
-    title: "Autonomous Content Engine",
-    body: "Automates keyword research, article writing, branded images, and SEO-optimized publishing so organic traffic scales without a full content team. One-time setup from $3,500; monthly retainer from $900. API usage billed at cost.",
-    image:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
-    imageAlt: "Developer workspace with code on multiple monitors",
-    imageLeft: false,
+    border: "border-l-violet-500",
+    badge: "from-violet-600 to-violet-500",
+    glow: "bg-violet-500/10",
   },
   {
-    title: "Gmail AI Auto-Responder",
-    body: "Reads incoming mail, queries your company knowledge base, and drafts professional replies in Gmail for approval—faster, more consistent responses. One-time setup from $2,500; monthly retainer from $650. API usage billed at cost.",
-    image:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=900&q=80",
-    imageAlt: "Professional working at a laptop",
-    imageLeft: true,
+    border: "border-l-sky-500",
+    badge: "from-sky-600 to-sky-500",
+    glow: "bg-sky-500/10",
   },
   {
-    title: "AI Financial Intelligence (quote-to-cash)",
-    body: "Extracts billing details from email threads and conversations, then generates draft invoices in QuickBooks or Xero to accelerate your revenue cycle. One-time setup from $2,000; monthly retainer from $400. API usage billed at cost.",
-    image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80",
-    imageAlt: "Analytics charts and financial data on a laptop",
-    imageLeft: false,
+    border: "border-l-teal-500",
+    badge: "from-teal-600 to-teal-500",
+    glow: "bg-teal-500/10",
   },
   {
-    title: "Brand Guardian (reputation management)",
-    body: "Monitors reviews and social platforms, applies sentiment analysis, and drafts factual, on-brand responses to protect and improve trust. One-time setup from $1,500; monthly retainer from $350. API usage billed at cost.",
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=80",
-    imageAlt: "Business analytics and growth charts",
-    imageLeft: true,
+    border: "border-l-rose-500",
+    badge: "from-rose-600 to-rose-500",
+    glow: "bg-rose-500/10",
   },
   {
-    title: "Monday Morning Executive Briefing",
-    body: "Aggregates Stripe, HubSpot, and advertising data into a concise weekly executive summary so decisions stay data-driven. One-time setup from $3,000; monthly retainer from $600. API usage billed at cost.",
-    image:
-      "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=900&q=80",
-    imageAlt: "Server room and network infrastructure",
-    imageLeft: false,
+    border: "border-l-amber-500",
+    badge: "from-amber-600 to-amber-500",
+    glow: "bg-amber-500/10",
   },
 ];
 
-const APPOINTMENT_CARDS = [
+const SERVICE_OFFERINGS = [
   {
-    title: "Discovery & Audit",
-    meta: "Systems, workflows & data sources",
-    image:
-      "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=640&q=80",
-    imageAlt: "Team meeting at a conference table",
+    num: 1,
+    title: "AI Knowledge Assistant (Your 24/7 Website Expert)",
+    blurb:
+      "Convert visitors immediately with accurate, hallucination-free answers grounded securely in your proprietary data.",
+    tiers: [
+      {
+        size: "Small",
+        scope:
+          "Basic RAG: Internal Knowledge Base (up to 100 PDFs/Docs) + Airtable sync. Single-channel deployment (Website widget).",
+        investment: "Setup: $1,500 – $2,500  ·  Retainer: $375/mo",
+      },
+      {
+        size: "Medium",
+        scope:
+          "Advanced RAG: Full CRM integration (HubSpot/Salesforce) + internal ticketing system. Multi-channel deployment (Website, Slack, Discord).",
+        investment: "Setup: $3,000 – $5,500  ·  Retainer: $600/mo",
+      },
+      {
+        size: "Enterprise",
+        scope:
+          "Full Data Warehouse sync (Snowflake/BigQuery), real-time API lookups, high-volume redundancy, complex permissions management.",
+        investment: "Setup: $6,000+  ·  Retainer: Custom",
+      },
+    ],
   },
   {
-    title: "Architecture & Development",
-    meta: "Pinecone brain + n8n workflows",
-    image:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=640&q=80",
-    imageAlt: "Laptop screen showing software code and development work",
+    num: 2,
+    title: "Autonomous Content Engine",
+    blurb:
+      "Scale organic traffic 10x without a full content team. Automated research, branded image generation, and direct SEO-optimized publishing.",
+    tiers: [
+      {
+        size: "Small",
+        scope:
+          "4 Long-form SEO articles + 4 branded images per month. Automated keyword research (low-competition focus).",
+        investment: "Setup: $3,500 – $4,500  ·  Retainer: $900/mo",
+      },
+      {
+        size: "Medium",
+        scope:
+          "12 Long-form SEO articles + 12 branded images per month. Automated technical SEO audits + competitor content gap analysis.",
+        investment: "Setup: $5,000 – $8,500  ·  Retainer: $1,500/mo",
+      },
+      {
+        size: "Enterprise",
+        scope:
+          "High-volume daily publishing (30+ articles/mo). Automated translation, localization, complex topic clustering, and backlink analysis.",
+        investment: "Setup: $10,000+  ·  Retainer: Custom",
+      },
+    ],
   },
   {
-    title: "QA, Go-Live & Retainer",
-    meta: "Bi-weekly logic audits included",
-    image:
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=640&q=80",
-    imageAlt: "Team gathered around a laptop reviewing work together",
+    num: 3,
+    title: "AI-Powered Gmail Automation",
+    blurb:
+      "Ensure no critical lead waits. AI reads mail, pulls context from your knowledge base, and drafts personalized replies (Human-in-the-Loop approval).",
+    tiers: [
+      {
+        size: "Small",
+        scope:
+          "Handles up to 250 inbound messages/mo. Accesses internal PDFs/Docs. Basic intent classification (e.g., Support vs. Sales).",
+        investment: "Setup: $2,500 – $3,500  ·  Retainer: $650/mo",
+      },
+      {
+        size: "Medium",
+        scope:
+          "Handles up to 1,000 inbound messages/mo. Full HubSpot/Salesforce integration for personalized context. Advanced multi-stage routing.",
+        investment: "Setup: $4,000 – $7,000  ·  Retainer: $1,200/mo",
+      },
+      {
+        size: "Enterprise",
+        scope:
+          "High-volume (5,000+ messages/mo). Real-time order lookup (ERP sync), sentiment-driven prioritization, automated ticket creation (Zendesk).",
+        investment: "Setup: $8,000+  ·  Retainer: Custom",
+      },
+    ],
+  },
+  {
+    num: 4,
+    title: "Automated Quote-to-Cash Intelligence",
+    blurb:
+      "Don’t let admin slow down revenue. AI extracts billing details from conversations and generates accurate invoices.",
+    tiers: [
+      {
+        size: "Small",
+        scope:
+          "Processes up to 50 invoices/mo from primary client emails. QuickBooks Online or Xero integration.",
+        investment: "Setup: $2,000 – $3,000  ·  Retainer: $400/mo",
+      },
+      {
+        size: "Medium",
+        scope:
+          "Processes up to 250 invoices/mo. Handles complex billing (milestone payments, multi-line items). Integrates with payment processors (Stripe).",
+        investment: "Setup: $3,500 – $6,000  ·  Retainer: $800/mo",
+      },
+      {
+        size: "Enterprise",
+        scope:
+          "High-volume invoicing (1,000+/mo). Full NetSuite or SAP integration. Automated invoice reconciliation and accounts receivable matching.",
+        investment: "Setup: $7,500+  ·  Retainer: Custom",
+      },
+    ],
+  },
+  {
+    num: 5,
+    title: "Autonomous Brand Guardian",
+    blurb:
+      "Protect your reputation around the clock. AI monitors all platforms, analyzes sentiment, and drafts factual, on-brand responses.",
+    tiers: [
+      {
+        size: "Small",
+        scope:
+          "Monitors primary platforms (Google Reviews, G2). Processes up to 50 feedback alerts/mo. Human-in-the-loop review.",
+        investment: "Setup: $1,500 – $2,500  ·  Retainer: $350/mo",
+      },
+      {
+        size: "Medium",
+        scope:
+          "Monitors 5+ platforms including social (Twitter, LinkedIn). Sentiment analysis driven routing. Alerts for high-risk topics.",
+        investment: "Setup: $3,000 – $5,000  ·  Retainer: $700/mo",
+      },
+      {
+        size: "Enterprise",
+        scope:
+          "Real-time cross-platform monitoring. Integrates with existing support stack. Predictive crisis management dashboard and trend analysis.",
+        investment: "Setup: $6,000+  ·  Retainer: Custom",
+      },
+    ],
+  },
+  {
+    num: 6,
+    title: "The Monday Morning Executive Briefing",
+    blurb:
+      "Make data-driven decisions with a concise, automated weekly summary of all critical data.",
+    tiers: [
+      {
+        size: "Small",
+        scope:
+          "Core data aggregation (Stripe, HubSpot, Google Analytics). Summary of key metrics (Revenue, Leads, Traffic).",
+        investment: "Setup: $3,000 – $4,000  ·  Retainer: $600/mo",
+      },
+      {
+        size: "Medium",
+        scope:
+          "5+ data sources (adds Advertising platforms, ERP). Comparative analysis (Week-over-Week). Executive summaries generated by AI.",
+        investment: "Setup: $5,000 – $8,000  ·  Retainer: $1,000/mo",
+      },
+      {
+        size: "Enterprise",
+        scope:
+          "Global data consolidation across departments. Custom KPIs (e.g., Churn prediction, LTV modeling). Drill-down interactive visualization layer.",
+        investment: "Setup: $9,000+  ·  Retainer: Custom",
+      },
+    ],
   },
 ];
 
@@ -110,47 +233,100 @@ const FAQ_ITEMS = [
   },
 ];
 
-const FAQ_IMAGE =
-  "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80";
-
-function ServiceRow({ title, body, image, imageAlt, imageLeft }) {
-  const imageBlock = (
-    <div className="relative aspect-[4/3] w-full overflow-hidden bg-neutral-200">
-      <SafeImage
-        src={image}
-        alt={imageAlt}
-        fill
-        className="object-cover"
-        sizes="(max-width: 768px) 100vw, 50vw"
-      />
+function TierTable({ rows }) {
+  return (
+    <div className="mt-6 w-full overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/40 shadow-[0_1px_0_0_rgba(15,23,42,0.05)] ring-1 ring-slate-200/50">
+      <div className="w-full overflow-x-auto">
+        <table className="min-w-[640px] w-full border-collapse text-left text-[16px] leading-relaxed sm:text-[17px]">
+          <thead>
+            <tr className="bg-slate-900/95 text-white">
+              <th className="w-[7.5rem] px-4 py-3.5 font-bold tracking-wide sm:px-5">
+                Size
+              </th>
+              <th className="px-4 py-3.5 font-bold sm:px-5">
+                Scope &amp; Capabilities
+              </th>
+              <th className="w-[14rem] min-w-[12rem] px-4 py-3.5 font-bold sm:px-5">
+                Investment
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white">
+            {rows.map((r, i) => (
+              <tr
+                key={r.size}
+                className={clsx(
+                  "border-t border-slate-100",
+                  i % 2 === 0 ? "bg-white" : "bg-slate-50/70",
+                )}
+              >
+                <td className="whitespace-nowrap align-top sm:px-5 sm:py-4 sm:pl-4">
+                  <span
+                    className={clsx(
+                      "inline-flex rounded-full px-3 py-1 text-sm font-bold ring-1 ring-inset",
+                      TIER_PILL[r.size] || "bg-slate-100 text-slate-800 ring-slate-200/80",
+                    )}
+                  >
+                    {r.size}
+                  </span>
+                </td>
+                <td className="align-top text-slate-700 sm:px-4 sm:py-4 sm:pl-0">
+                  {r.scope}
+                </td>
+                <td className="align-top font-medium text-slate-800 sm:pr-5 sm:py-4 sm:pl-0">
+                  {r.investment}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
+}
 
-  const textBlock = (
-    <div className="flex flex-col justify-center px-1 py-2 md:px-6 lg:px-10">
-      <h2 className="text-[20px] font-bold leading-snug text-neutral-900">
-        {title}
-      </h2>
-      <p className="mt-3 text-[20px] font-normal leading-relaxed text-neutral-700">
-        {body}
-      </p>
-    </div>
-  );
+function ServiceOfferingCard({ item, index }) {
+  const accent = OFFERING_ACCENTS[index % OFFERING_ACCENTS.length];
+  const { num, title, blurb, tiers } = item;
 
   return (
-    <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-10 lg:gap-14">
-      {imageLeft ? (
-        <>
-          {imageBlock}
-          {textBlock}
-        </>
-      ) : (
-        <>
-          <div className="order-2 md:order-1">{textBlock}</div>
-          <div className="order-1 md:order-2">{imageBlock}</div>
-        </>
+    <article
+      className={clsx(
+        "group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white pl-0 shadow-sm transition-shadow duration-300 hover:shadow-md",
+        "border-l-[5px]",
+        accent.border,
       )}
-    </div>
+    >
+      <div
+        className={clsx(
+          "pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-50 blur-3xl transition group-hover:opacity-70",
+          accent.glow,
+        )}
+        aria-hidden
+      />
+      <div className="relative px-5 py-6 sm:px-7 sm:py-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
+          <div
+            className={clsx(
+              "flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-sm font-bold text-white shadow-sm sm:h-14 sm:w-14 sm:text-base",
+              accent.badge,
+            )}
+            aria-hidden
+          >
+            {String(num).padStart(2, "0")}
+          </div>
+          <div className="min-w-0 flex-1">
+            <h2 className="text-[1.2rem] font-bold leading-snug text-slate-900 sm:text-[1.35rem]">
+              {title}
+            </h2>
+            <p className="mt-2 text-[17px] leading-relaxed text-slate-600 sm:text-[18px]">
+              {blurb}
+            </p>
+            <TierTable rows={tiers} />
+          </div>
+        </div>
+      </div>
+    </article>
   );
 }
 
@@ -161,113 +337,115 @@ export default function ServicesPage() {
         <title>Our Services | Complete AI IT Services</title>
         <meta
           name="description"
-          content="Complete AI IT Services — AI knowledge assistants, autonomous content, Gmail copilots, quote-to-cash, brand guardian, and executive briefings. Pleasanton, CA."
+          content="High-performance AI scaled to your business: tiered RAG assistants, content engines, Gmail automation, quote-to-cash, brand guardian, and executive briefings. Pleasanton, CA."
         />
       </Head>
-      <div className="min-h-screen bg-white font-sans text-neutral-800">
+      <div
+        className={clsx(
+          "min-h-screen bg-slate-50 font-sans text-slate-800",
+          servicesShareFont.className,
+        )}
+      >
         <div className="bg-[#1c1c1c] text-white">
           <SiteHeader activeNav="services" />
         </div>
 
-        <main
-          className={`${servicesShareFont.className} text-[20px] font-normal leading-relaxed text-neutral-800`}
-        >
-          <h1
-            className="px-4 pb-10 pt-12 text-center font-bold uppercase leading-snug text-neutral-900 sm:px-6 sm:pb-12 sm:pt-16 md:pb-16 md:pt-20"
-            style={{ fontSize: "27px", lineHeight: 1.2 }}
-          >
-            Our Services
-          </h1>
-
-          <div className="mx-auto max-w-5xl space-y-14 px-4 pb-16 sm:space-y-16 sm:px-6 sm:pb-20 md:space-y-24 md:px-10 md:pb-28">
-            {SERVICE_ROWS.map((row) => (
-              <ServiceRow key={row.title} {...row} />
-            ))}
-          </div>
-
+        <main className="text-[18px] font-normal leading-relaxed text-slate-800 sm:text-[19px]">
           <section
-            className="bg-[#2d2d2d] px-6 py-14 text-white sm:px-8 md:py-20 lg:px-12 xl:px-16"
-            aria-labelledby="appointments-heading"
+            className="relative bg-gradient-to-b from-slate-100 via-white to-slate-50"
+            aria-labelledby="services-hero"
           >
-            <h2
-              id="appointments-heading"
-              className="text-center text-[26px] font-semibold uppercase tracking-wide text-white"
+            <div
+              className="pointer-events-none absolute inset-0 overflow-hidden"
+              aria-hidden
             >
-              Implementation methodology
-            </h2>
-            <div className="mx-auto mt-10 grid w-full max-w-5xl gap-6 md:mt-14 md:grid-cols-3 md:gap-6 lg:max-w-6xl lg:gap-8 xl:max-w-7xl">
-              {APPOINTMENT_CARDS.map((card) => (
-                <article
-                  key={card.title}
-                  className="flex flex-col bg-white text-left text-neutral-900"
-                >
-                  <div className="relative aspect-[16/11] w-full bg-neutral-200 lg:aspect-[16/10]">
-                    <SafeImage
-                      src={card.image}
-                      alt={card.imageAlt}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 420px"
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col px-5 pb-5 pt-4 md:px-6 md:pb-6 md:pt-5 lg:px-7 lg:pb-7">
-                    <h3 className="text-[20px] font-bold leading-snug text-black">
-                      {card.title}
-                    </h3>
-                    <p className="mt-1 text-[20px] font-normal leading-snug text-neutral-600">
-                      {card.meta}
-                    </p>
-                    <div className="mt-5">
-                      <Link
-                        href="/contact"
-                        className="inline-block bg-black px-5 py-2.5 text-[18px] font-semibold uppercase tracking-wide text-white transition hover:bg-neutral-800"
-                      >
-                        Get started
-                      </Link>
-                    </div>
-                  </div>
-                </article>
-              ))}
+              <div className="absolute -left-32 top-0 h-64 w-64 rounded-full bg-indigo-200/30 blur-3xl" />
+              <div className="absolute -right-24 top-20 h-56 w-56 rounded-full bg-violet-200/25 blur-3xl" />
+            </div>
+            <div className="relative mx-auto max-w-5xl px-4 pt-14 pb-5 text-center sm:px-6 sm:pt-16 sm:pb-6 md:px-10 md:pt-20 md:pb-7">
+              <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-slate-200/90 bg-white/85 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-600 shadow-md shadow-slate-300/25 ring-1 ring-white/60 backdrop-blur-sm sm:px-5 sm:text-xs">
+                <Layers className="h-3.5 w-3.5 shrink-0 text-indigo-600 sm:h-4 sm:w-4" strokeWidth={2.25} aria-hidden />
+                <span>Tiered AI implementation</span>
+              </div>
+
+              <h1
+                id="services-hero"
+                className="mx-auto mt-6 max-w-4xl text-balance font-extrabold uppercase leading-[1.12] tracking-tight text-slate-900 sm:leading-[1.1]"
+                style={{ fontSize: "clamp(1.35rem, 2.1vw + 0.35rem, 2rem)" }}
+              >
+                <span className="block">High-Performance AI,</span>
+                <span className="mt-1 block bg-gradient-to-r from-indigo-600 via-violet-600 to-teal-600 bg-clip-text text-transparent sm:mt-1.5">
+                  Scaled to Your Business Size
+                </span>
+              </h1>
+
+              <div className="mx-auto mt-6 w-full max-w-5xl rounded-[1.25rem] border border-slate-200/80 bg-white/85 px-6 pt-6 pb-4 text-left shadow-[0_22px_55px_-28px_rgba(15,23,42,0.18)] ring-1 ring-white/70 backdrop-blur-sm sm:mt-7 sm:px-8 sm:pt-8 sm:pb-5 md:px-10 md:pt-8 md:pb-6">
+                <p className="m-0 w-full text-left text-[17px] font-normal leading-relaxed text-slate-700 sm:text-[18px] md:text-[19px]">
+                  <span className="font-semibold text-slate-800">Generic AI fails</span> when it meets business complexity. We build sophisticated,{" "}
+                  <span className="font-medium text-slate-800">private RAG architectures</span>—powered by n8n orchestration and vector knowledge bases—that grow as you do.{" "}
+                  <span className="font-bold tracking-tight text-slate-900 sm:text-[18px] md:text-[19px]">
+                    Choose your tier, scale your operations, and upgrade whenever you’re ready
+                  </span>
+                </p>
+              </div>
             </div>
           </section>
 
+          <div className="mx-auto max-w-5xl space-y-8 px-4 pb-12 pt-4 sm:space-y-10 sm:px-6 sm:pb-14 sm:pt-5 md:px-10 md:pb-16 md:pt-6">
+            {SERVICE_OFFERINGS.map((o, i) => (
+              <React.Fragment key={o.num}>
+                <ServiceOfferingCard item={o} index={i} />
+                {o.num === 6 ? (
+                  <div
+                    className="mx-auto max-w-3xl rounded-2xl border border-amber-200/60 bg-amber-50/90 px-5 py-4 text-left text-[16px] text-amber-950 shadow-sm sm:text-[17px]"
+                    role="note"
+                  >
+                    <strong className="font-bold text-amber-950">Note on usage fees: </strong>
+                    Tier definitions are based on our setup and maintenance complexity.
+                    Usage-based API fees (OpenAI, Pinecone, data platforms) are separate and
+                    remain a direct pass-through billed at cost.
+                  </div>
+                ) : null}
+              </React.Fragment>
+            ))}
+          </div>
+
+          <TieredMethodologySection
+            headingId="services-methodology-heading"
+            showCta
+            ctaHref="/contact-us#inquiries-rfp"
+            ctaLabel="Start with a message"
+          />
+
           <section
-            className="grid grid-cols-1 md:grid-cols-2"
+            className="border-t border-slate-200 bg-white px-4 py-16 sm:px-6 md:px-10 md:py-20"
             aria-labelledby="faq-heading"
           >
-            <div className="flex flex-col justify-center bg-white px-8 py-14 md:px-12 md:py-20 lg:px-16">
+            <div className="mx-auto max-w-3xl">
               <h2
                 id="faq-heading"
-                className="text-[20px] font-bold uppercase tracking-wide text-neutral-900"
+                className="text-center text-[1.25rem] font-bold uppercase tracking-wide text-slate-900"
               >
                 Frequently asked questions
               </h2>
-              <dl className="mt-8">
-                {FAQ_ITEMS.map((item, i) => (
-                  <React.Fragment key={item.q}>
-                    <dt
-                      className={clsx(
-                        "text-[20px] font-bold leading-snug text-black",
-                        i > 0 && "mt-8",
-                      )}
-                    >
+              <p className="mt-2 text-center text-[16px] text-slate-600 sm:text-[17px]">
+                Clear answers on retainers, usage, privacy, and engagement.
+              </p>
+              <ul className="mt-10 space-y-3">
+                {FAQ_ITEMS.map((item) => (
+                  <li
+                    key={item.q}
+                    className="overflow-hidden rounded-2xl border border-slate-200/90 bg-slate-50/60 p-5 transition hover:border-slate-300/90 hover:bg-slate-50 sm:p-6"
+                  >
+                    <h3 className="text-[17px] font-bold leading-snug text-slate-900 sm:text-[18px]">
                       {item.q}
-                    </dt>
-                    <dd className="mt-2 text-[20px] font-normal leading-relaxed text-neutral-800">
+                    </h3>
+                    <p className="mt-2 text-[16px] leading-relaxed text-slate-600 sm:text-[17px]">
                       {item.a}
-                    </dd>
-                  </React.Fragment>
+                    </p>
+                  </li>
                 ))}
-              </dl>
-            </div>
-            <div className="relative min-h-[280px] w-full md:min-h-[520px]">
-              <SafeImage
-                src={FAQ_IMAGE}
-                alt="Overhead view of a desk with laptop, notes, and work materials"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
+              </ul>
             </div>
           </section>
         </main>

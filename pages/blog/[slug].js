@@ -7,6 +7,12 @@ import DesigningAiKnowledgeAssistantArticleBody from "../../components/blog/Desi
 import GmailCopilotsGovernanceArticleBody from "../../components/blog/GmailCopilotsGovernanceArticleBody";
 import BrandGuardianPlaybooksArticleBody from "../../components/blog/BrandGuardianPlaybooksArticleBody";
 import MondayBriefingsUnifiedNarrativeArticleBody from "../../components/blog/MondayBriefingsUnifiedNarrativeArticleBody";
+import RagKnowledgeAssistantArticleBody from "../../components/blog/RagKnowledgeAssistantArticleBody";
+import QuoteToCashAiArticleBody from "../../components/blog/QuoteToCashAiArticleBody";
+import ContentEngineSeoArticleBody from "../../components/blog/ContentEngineSeoArticleBody";
+import BiweeklyLogicAuditArticleBody from "../../components/blog/BiweeklyLogicAuditArticleBody";
+import PineconeN8nArchitectureArticleBody from "../../components/blog/PineconeN8nArchitectureArticleBody";
+import ApiCostGovernanceArticleBody from "../../components/blog/ApiCostGovernanceArticleBody";
 import {
   BLOG_POSTS,
   getPostBySlug,
@@ -19,6 +25,12 @@ const ARTICLE_BODIES = {
   "brand-guardian-playbooks-multi-location-seo": BrandGuardianPlaybooksArticleBody,
   "monday-briefings-unified-business-narrative-seo":
     MondayBriefingsUnifiedNarrativeArticleBody,
+  "rag-knowledge-assistant": RagKnowledgeAssistantArticleBody,
+  "quote-to-cash-ai": QuoteToCashAiArticleBody,
+  "content-engine-seo": ContentEngineSeoArticleBody,
+  "biweekly-logic-audit": BiweeklyLogicAuditArticleBody,
+  "pinecone-n8n-architecture": PineconeN8nArchitectureArticleBody,
+  "api-cost-governance": ApiCostGovernanceArticleBody,
 };
 
 function ArticlePlaceholder() {

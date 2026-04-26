@@ -3,11 +3,12 @@
 import React, { useState } from "react";
 
 /**
- * @param {{ titleFontClassName?: string }} props
+ * @param {{ titleFontClassName?: string; signUpButtonFontClassName?: string }} props
  * When `titleFontClassName` is set (Squada One from `next/font`), the heading
  * sits in one row with the email field and button (reference layout).
+ * `signUpButtonFontClassName`: Share 18px stack for the button label.
  */
-export default function SubscribeForm({ titleFontClassName }) {
+export default function SubscribeForm({ titleFontClassName, signUpButtonFontClassName }) {
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
 
@@ -49,7 +50,8 @@ export default function SubscribeForm({ titleFontClassName }) {
         {titleFontClassName ? (
           <h2
             id="subscribe-heading"
-            className={`${titleFontClassName} shrink-0 text-left text-2xl font-bold uppercase leading-none tracking-wide text-neutral-900 sm:text-[28px]`}
+            className={`${titleFontClassName} shrink-0 text-left text-[48px] font-normal uppercase leading-none tracking-wide text-neutral-900 antialiased`}
+            style={{ lineHeight: 1.1 }}
           >
             Subscribe
           </h2>
@@ -70,7 +72,7 @@ export default function SubscribeForm({ titleFontClassName }) {
         <button
           type="submit"
           disabled={status === "loading"}
-          className="inline-flex min-h-[48px] shrink-0 items-center justify-center gap-3 border border-neutral-300 bg-white px-5 text-xs font-bold uppercase tracking-[0.12em] text-neutral-900 transition hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-60"
+          className={`inline-flex min-h-[48px] shrink-0 items-center justify-center gap-3 border border-neutral-300 bg-white px-5 text-[18px] font-normal uppercase leading-none tracking-wide text-neutral-900 transition hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-60 ${signUpButtonFontClassName ?? ""}`.trim()}
         >
           <span className="h-px w-6 shrink-0 bg-neutral-300 sm:w-8" aria-hidden />
           {status === "loading" ? "Signing up…" : "Sign up"}
